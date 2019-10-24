@@ -1,0 +1,3 @@
+SELECT DATE('now', '+1 YEAR', 'START OF YEAR','-1 DAY')
+
+SELECT STRFTIME('%m', DATE('now', '+1 YEAR', 'START OF YEAR','-1 DAY') )
