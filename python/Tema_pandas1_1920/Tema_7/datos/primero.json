@@ -1,0 +1,6 @@
+{"Genre": "Country pop",
+ "Group": {"Name": "Lady Antebellum"},
+ "Songs": [{"Date": 2010, "Length": "4:37", "Title": "Need you now"},
+  {"Date": 2010, "Length": "4:17", "Title": "I Run To You"},
+  {"Length": "3:44", "Title": "American honey"}],
+ "_id": "ObjectId(58d50d15bf9c245136c1cbac)"}

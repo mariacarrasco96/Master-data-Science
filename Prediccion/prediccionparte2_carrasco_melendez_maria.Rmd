@@ -1,0 +1,273 @@
+---
+title: "prediccion2_carrasco_melendez_maria"
+author: "Maria Carrasco Melendez"
+date: "10/16/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+library(readr)
+library(tidyverse)
+library(fBasics)
+library(nortest)
+```
+
+En primer lugar, procedemos a cambiar el nombre de las variables para poder trabajar con ellas con mayor facilidad.
+
+
+```{r}
+nba<-read.csv("/Users/mariacarrasco/Downloads/nba.csv")
+nba
+nba=na.omit(nba)
+nba=unique(nba)
+names(nba)[3]<-"Pais"
+names(nba)[4]<-"Ranking"
+names(nba)[6]<-"Equipo"
+names(nba)[7]<-"Partidos"
+names(nba)[8]<-"Minutos"
+names(nba)[9]<-"Eficiencia"
+names(nba)[10]<-"Aciertos"
+names(nba)[11]<-"Triple_Intento"
+names(nba)[12]<-"Tiro_Libre"
+names(nba)[13]<-"Rebote_Ofensa"
+names(nba)[14]<-"Rebote_Defensa"
+names(nba)[15]<-"Rebotes_Total"
+names(nba)[16]<-"Asistencia"
+names(nba)[17]<-"Robo"
+names(nba)[18]<-"Bloqueos"
+names(nba)[19]<-"PerdidaBalon"
+names(nba)[20]<-"Jugar_Equipo"
+names(nba)[21]<-"Ataque_Acertado"
+names(nba)[22]<-"Defensa_Acertada"
+names(nba)[23]<-"Aciertos_final"
+names(nba)[24]<-"Aciertos48"
+
+```
+
+El objetivo es encontrar el modelo que permita predecir con mayor precisión el salario de un jugador. Conociendo la dimensión de mi dataset, compuesto por 483 observaciones y 28 variables, determino que no hay ninguna observacion la cual no se encuentre explicada por las variables de mi modelo.
+
+
+```{r}
+str(nba)
+1 - (sum(complete.cases(nba)) / nrow(nba))
+
+
+dim(nba)
+
+
+library(leaps)
+mejores_modelos <- regsubsets(Salary~.-(Equipo+Player+Pais) ,data=nba, nvmax = 25)
+summary(mejores_modelos)
+
+# El argumento nvmax determina el tamaño máximo de los modelos a inspeccionar.
+# Si se quiere realizar best subset selection evaluando todos los posibles 
+# modelos, nvmax tiene que ser igual al número de variables disponibles
+
+```
+
+
+```{r}
+names(summary(mejores_modelos))
+```
+El modelo que ocupa la posición 11 es el que mayor R2ajustado
+ alcanza.
+
+```{r}
+summary(mejores_modelos)$adjr2
+which.max(summary(mejores_modelos)$adjr2)
+```
+Dado que las posiciones en la tabla creada por regsubsets() se corresponden con el número de predictores, el mejor modelo es el que contiene 11 predictores.
+
+Una representación gráfica del estadístico escogido para comparar los modelos, en este caso R2ajustado,frente al número de predictores permite evaluar la evolución de la precisión del modelo en función del tamaño y si la mejora es sustancial.
+```{r}
+library(ggplot2)
+p <- ggplot(data = data.frame(n_predictores = 1:24,
+                              R_ajustado = summary(mejores_modelos)$adjr2),
+            aes(x = n_predictores, y = R_ajustado)) +
+    geom_line() +
+    geom_point()
+
+p <- p + geom_point(aes(
+                    x = n_predictores[which.max(summary(mejores_modelos)$adjr2)],
+                    y = R_ajustado[which.max(summary(mejores_modelos)$adjr2)]),
+                    colour = "red", size = 3)
+p <- p +  scale_x_continuous(breaks = c(0:24)) + 
+          theme_bw() +
+          labs(title = 'R2_ajustado vs número de predictores', 
+               x =  'número predictores')
+p
+
+```
+
+Además se procederá a la realización del forward, comparando con los resultados obtenidos a través del best subset y plasmando el  valor de mis 8 coeficientes, tal y como indica el r cuadrado. Adem´s nuestro nvmax es 25 ya que se han eliminado 3 variables no relevantes de las 28.
+```{r}
+mejores_modelos_forward <- regsubsets(Salary~.-(Equipo+Player+Pais) ,data=nba, nvmax = 25, method="forward")
+
+mejores_modelos_forward
+summary(mejores_modelos_forward)
+
+
+which.max(summary(mejores_modelos_forward)$adjr2)
+
+coef(object = mejores_modelos_forward, 8)
+
+```
+#SIMPLE VALIDATION TEST
+
+Mediante Simple Validation y Cross-Validation se puede estimar el test error de cada modelo y seleccionar aquel para el que sea menor. La ventaja de este método frente a los anteriormente descritos es que se trata de una estimación directa que requiere de menos asunciones. 
+
+El primer paso del método validation set requiere dividir aleatoriamente las observaciones disponibles en training set y test set.
+
+tras este proceso de evaluación de regsubsets() se han seleccionado de 25 modelos, el mejor para cada tamaño. Para poder compararlos se procede a estimar el validation test error empleando las observaciones que se han excluido del training y que se han designado como test.
+
+
+```{r}
+library(leaps)
+datos <- na.omit(nba)
+set.seed(1)
+train <- sample(x = 1:483, size = 322, replace = FALSE)
+
+mejores_modelos_forward <- regsubsets(Salary~.-(Equipo+Player+Pais) ,data=nba, nvmax = 25, method="forward")
+
+validation_error<-rep(NA,25)
+
+test_matrix<- model.matrix(Salary~.-(Equipo+Player+Pais) ,data=nba[-train,])
+for (i in 1:24) {
+    # Se extraen los coeficientes del modelo
+    coeficientes <- coef(object = mejores_modelos_forward, id = i)
+    
+    # Se identifican los predictores que forman el modelo y se extraen de la
+    # matriz modelo
+    predictores <- test_matrix[, names(coeficientes)]
+    
+    # Se obtienen las predicciones mediante el producto matricial de los
+    # predictores extraídos y los coeficientes del modelo
+    predicciones <- predictores %*% coeficientes
+    
+    # Finalmente se calcula la estimación del test error como el promedio de
+    # los residuos al cuadrado (MSE)
+    validation_error[i] <- mean((datos$Salary[-train] - predicciones)^2)
+}
+
+which.min(validation_error)
+
+
+
+#grafico
+
+p <- ggplot(data = data.frame(n_predictores = 1:25,
+                              Estimacion_MSE = validation_error),
+            aes(x = n_predictores, y = Estimacion_MSE)) +
+    geom_line() +
+    geom_point()
+
+# Se identifica en rojo el mínimo
+p <- p + geom_point(aes(x = n_predictores[which.min(validation_error)], 
+                        y = validation_error[which.min(validation_error)]),
+                        colour = "red", size = 3)
+
+p <- p +  scale_x_continuous(breaks = c(0:25)) + 
+          theme_bw() +
+          labs(title = 'validation MSE vs número de predictores',
+               x =  'número predictores')
+p
+
+```
+El modelo con menor validation test error es el que contiene 13 predictores. Se puede considerar que 13 es el número de predictores que debe contener el modelo para alcanzar la mayor precisión predictiva
+
+```{r}
+
+#Ahora que llegamos a la conclusion que el modelo debe contar con 15 predictores, lo volvemos a ajustar
+
+mejores_modelos_forward<-regsubsets(Salary~.-(Equipo+Player+Pais) ,data=nba, nvmax = 24, method="forward")
+
+coef(object = mejores_modelos_forward, id = 13)
+```
+##ELASTIC NET
+
+Es una combinacion de Ridge y Lasso, que se utilizan para minimizar el problema entre el sesgo y la varianza proporcionando una disminucion del error de prediccion
+
+```{r}
+library(caret)
+library(rsample)
+
+set.seed(123)
+NBA_split <- initial_split(nba, prop = .7, strata = "Salary")
+NBA_train <- training(NBA_split)
+NBA_test  <- testing(NBA_split)
+
+```
+```{r}
+NBA_train_x <- model.matrix(Salary ~ ., NBA_train)[, -1]
+NBA_train_y <- log(NBA_train$Salary)
+
+```
+```{r}
+NBA_test_x <- model.matrix(Salary ~ ., NBA_test)[, -1]
+NBA_test_y <- log(NBA_test$Salary)
+```
+
+```{r}
+library(caret)
+train_control <- trainControl(method = "cv", number = 10)
+
+caret_mod <- train(
+  x = NBA_train_x,
+  y = NBA_train_y,
+  method = "glmnet",
+  preProc = c("center", "scale", "zv", "nzv"),
+  trControl = train_control,
+  tuneLength = 10
+)
+
+caret_mod
+view(caret_mod)
+```
+
+Como gracias al modelo de regularizacion de Elastic Net podemos determinar que alpha es 0.7 por lo que se aproxima a 1, debemos realizar el modelo Lasso.
+
+El método lasso fuerza a que las estimaciones de los coeficientes de los predictores tiendan a cero. La diferencia es que lasso sí es capaz de fijar algunos de ellos exactamente a cero, lo que permite además de reducir la varianza, realizar selección de predictores.
+
+#Es necesario para conseguir minimizar el error elegir un lambda apropiado.
+```{r}
+library(glmnet)
+# x e y son la matriz modelo y el vector respuesta creados anteriormente con
+# los datos de NBAdata 
+modelos_lasso <- glmnet(x = NBA_train_x, y = NBA_train_y, alpha = 1)
+plot(modelos_lasso, xvar = "lambda", label = TRUE)
+```
+```{r}
+set.seed(1)
+cv_error_lasso <- cv.glmnet(x = NBA_train_x, y = NBA_train_y, alpha = 1, nfolds = 10)
+plot(cv_error_lasso)
+```
+```{r}
+#es el valor de lambda con el que se consigue el minimo error 
+cv_error_lasso$lambda.min
+```
+Reajuste del modelo con el lambda óptimo
+```{r}
+modelo_final_lasso <- cv.glmnet(x = NBA_train_x, y = NBA_train_y, alpha = 1)
+coef(modelo_final_lasso)
+
+min(modelo_final_lasso$cvm)
+```
+
+PREDICCIÓN FINAL
+```{r}
+NBAprediccion <- predict(modelo_final_lasso, s=modelo_final_lasso$lambda.min, NBA_test_x)
+MEDIA <-mean((NBA_test_y - NBAprediccion)^2)
+MEDIA
+
+
+
+
+```
+
+
+```{r}

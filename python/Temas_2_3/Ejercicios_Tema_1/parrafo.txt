@@ -1,0 +1,20 @@
+﻿# Cabecera H1 
+## Cabecera H2: Probando distintos estilos de texto.
+### Cabecera H3: Tipos de letra.
+
+Puedo escribir texto normal.
+
+_Con un guión bajo escribo en itálica_.
+
+__Con dos guiones bajos escribo en negrita__.
+
+### Cabecera de tipo H3: Lista de items.
+
+* Item 1
+* Item 2
+* Item 3 : para los items utilizamos el símbolo '*' al comienzo.
+    * Item 3a  
+    * Item 3b: para los sub-items utilizamos el tabulador  yel símbolo '*' al comienzo.
+    * Item 3c
+
+# Otra cabecera H1

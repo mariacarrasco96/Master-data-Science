@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571849879476.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4072133539",
+    "id" : "87FA3DE",
+    "lastKnownWriteTime" : 1571855007,
+    "last_content_update" : 1571855007864,
+    "path" : "~/Documents/Tecnicas de visualizacion/clase_visualizacion_parte2/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+        "cursorPosition" : "11,68",
+        "scrollLine" : "1",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

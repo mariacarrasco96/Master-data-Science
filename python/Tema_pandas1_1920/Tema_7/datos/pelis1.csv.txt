@@ -1,0 +1,8 @@
+Año,Título,Género
+1982,E.T. the Extra-Terrestrial,Fantasy
+1986,Top Gun,Romance
+1991,The Doors,Musical
+1992,The Crying Game,War
+1995,Toy Story,Animation
+1995,GoldenEye,Action
+1995,Four Rooms,Thriller

@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1569348062648.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C62E5066",
+    "lastKnownWriteTime" : 4455297276,
+    "last_content_update" : 1569348062648,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "6D67E0C6",
+        "caption" : "nombresmasrecientes",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=nombresmasrecientes&cache_key=6D67E0C6",
+        "displayedObservations" : "1344",
+        "environment" : "",
+        "expression" : "nombresmasrecientes",
+        "object" : "nombresmasrecientes",
+        "preview" : "0",
+        "totalObservations" : "1344",
+        "variables" : "2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

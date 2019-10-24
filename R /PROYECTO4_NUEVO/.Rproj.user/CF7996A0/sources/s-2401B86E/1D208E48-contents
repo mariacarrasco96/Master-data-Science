@@ -1,0 +1,74 @@
+---
+title: "Prediccion_maria_carrasco"
+author: "yo"
+date: "10/10/2019"
+output: pdf_document
+---
+```{r}
+library(readr)
+library(tidyverse)
+library(fBasics)
+library(nortest)
+```
+
+```{r}
+nba<-data.frame(nba)
+nba
+nba=na.omit(nba)
+nba=unique(nba)
+names(nba)[3]<-"Pais"
+names(nba)[4]<-"Ranking"
+names(nba)[6]<-"Equipo"
+names(nba)[7]<-"Partidos"
+names(nba)[8]<-"Minutos"
+names(nba)[9]<-"Eficiencia"
+names(nba)[10]<-"Aciertos"
+names(nba)[11]<-"Triple_Intento"
+names(nba)[12]<-"Tiro_Libre"
+names(nba)[13]<-"Rebote_Ofensa"
+names(nba)[14]<-"Rebote_Defensa"
+names(nba)[15]<-"Rebotes_Total"
+names(nba)[16]<-"Asistencia"
+names(nba)[17]<-"Robo"
+names(nba)[18]<-"Bloqueos"
+names(nba)[19]<-"PerdidaBalon"
+names(nba)[20]<-"Jugar_Equipo"
+names(nba)[21]<-"Ataque_Acertado"
+names(nba)[22]<-"Defensa_Acertada"
+names(nba)[23]<-"Aciertos"
+names(nba)[24]<-"Aciertos48"
+
+nba <- nba[,-(25:28)]
+```
+
+
+
+```{r}
+library(MASS)
+library(leaps)
+
+nba2_modelo<-lm(Salary~ . - (Equipo + Player + Pais), data=nba)
+
+summary(nba2)
+```
+
+```{r}
+library(MASS)
+library(leaps)
+
+stepAIC(nba2_modelo, direction="backward")
+```
+
+```{r}
+nba2_modelo_2=lm(Salary ~ Ranking + Age + Partidos + Minutos + Rebote_Ofensa + 
+    Rebotes_Total + Jugar_Equipo + Aciertos.1, nba)
+```
+```{r}
+#Detección de la multicolinealidad
+library(car)
+vif(nba2_modelo_2)
+
+sqrt(vif(nba2_modelo_2)) > 2
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

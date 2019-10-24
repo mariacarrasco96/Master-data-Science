@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571910078772.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "744AF85B",
+    "lastKnownWriteTime" : 4412473596,
+    "last_content_update" : 1571910078772,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "45335166",
+        "caption" : "day",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=day&cache_key=45335166",
+        "displayedObservations" : "731",
+        "environment" : "",
+        "expression" : "day",
+        "object" : "day",
+        "preview" : "0",
+        "totalObservations" : "731",
+        "variables" : "16"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

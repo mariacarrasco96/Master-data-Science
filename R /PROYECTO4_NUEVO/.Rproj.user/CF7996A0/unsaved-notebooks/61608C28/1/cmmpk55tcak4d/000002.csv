@@ -1,0 +1,2 @@
+"0","nba2_modelo_2=lm(Salary ~ Ranking + Age + Partidos + Minutos + Rebote_Ofensa + "
+"0","    Rebotes_Total + Jugar_Equipo + Aciertos.1, nba)"

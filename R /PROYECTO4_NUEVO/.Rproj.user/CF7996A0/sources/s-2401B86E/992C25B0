@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570727882095.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "992C25B0",
+    "lastKnownWriteTime" : 4515574012,
+    "last_content_update" : 1570727882095,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "id" : "bba72e68229c44a8ba5545a0a8b8ecc5",
+        "name" : "nba2_modelo",
+        "title" : "nba2_modelo"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "object_explorer"
+}

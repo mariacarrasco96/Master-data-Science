@@ -1,0 +1,152 @@
+---
+title: "NBA-PREDICCION"
+author: "Val Huerta"
+date: "10/7/2019"
+output: pdf_document
+---
+```{r}
+library(readr)
+library(tidyverse)
+library(fBasics)
+library(nortest
+```
+
+```{r}
+# En primer lugar comenzamos eliminando los posibles NA de nuestra base de datos, y a continuacion, para facilitarme el entendimiento considero una buena opción renombrar las varibles.
+
+nba <- read.csv("~/Documents/CUNEF/Predicción/nba.csv")
+NBAdata <- na.omit(NBAdata)
+library(dplyr)
+names(NBAdata)[3] = "Country"
+names(NBAdata)[4] = "Ranking"
+names(NBAdata)[6] = "Team"
+names(NBAdata)[7] = "Partidos"
+names(NBAdata)[8] = "Minutos"
+names(NBAdata)[9] = "Efficiency"
+names(NBAdata)[10] = "Acierto"
+names(NBAdata)[11] = "IntentoTriple"
+names(NBAdata)[12] = "IntentoLibre"
+names(NBAdata)[13] = "ReboteAtaque"
+names(NBAdata)[14] = "ReboteDefensa"
+names(NBAdata)[15] = "RebotesTotal"
+names(NBAdata)[16] = "Asistencia"
+names(NBAdata)[17] = "Robo"
+names(NBAdata)[18] = "Bloqueo"
+names(NBAdata)[19] = "PerdidaDeBalon"
+names(NBAdata)[20] = "Compañerismo"
+names(NBAdata)[21] = "BuenAtaque"
+names(NBAdata)[22] = "BuenaDefensa"
+names(NBAdata)[23] = "BuenoTotal"
+names(NBAdata)[24] = "Contribución"
+
+```
+
+
+
+```{r}
+
+library(MASS)
+library(leaps)
+
+#Para llevar a cabo la prediccion, primero vamos a realizar la regresion mediante la funcion lm, guardandolo en "Prediccion1". Para ello incluimos en primer lugar Salary que es la variable que queremos medir, seguida de las variables que considero que NO son relevantes para el estudio. Y la base de datos que usamos es la que he denominado como "NBAdata". Con esto lo que conseguimos es realizar una selección de variables.
+
+Prediccion1 <- lm(Salary~ . - (Team + Player + Country), data=NBAdata)
+summary(Prediccion1)
+
+```
+```{r}
+#Gracias a la funcion "lm", vamos a saber que variables son mas representativas para nuestro estudio. En mi caso seria, Ranking, Age, Partidos y Minutos. 
+```
+
+
+
+```{r}
+#Una vez hemos determinado que variables son las más representativas, 
+#modeloBEST
+
+library (leaps)
+BEST=regsubsets(Salary~.-(Team + Player + Country),NBAdata )
+ResumenBEST=summary(BEST)
+ResumenBEST
+```
+```{r}
+ResumenBEST$bic
+```
+```{r}
+ResumenBEST$rss
+```
+```{r}
+ResumenBEST$cp
+```
+```{r}
+ResumenBEST$aic
+```
+
+
+```{r}
+#modelo FORWARD
+
+library(MASS)
+FORWARD=regsubsets(Salary~.-(Team + Player + Country),NBAdata,method ="forward")
+ResumenFORWARD = summary (FORWARD)
+ResumenFORWARD
+```
+
+```{r}
+ResumenFORWARD$bic
+```
+```{r}
+ResumenFORWARD$rss
+```
+```{r}
+ResumenFORWARD$cp
+```
+```{r}
+ResumenFORWARD$aic
+```
+```{r}
+library(MASS)
+
+stepAIC(Prediccion1, direction="backward")
+```
+
+```{r}
+BACKWARD=regsubsets(Salary~.-(Team + Player + Country),NBAdata,method ="backward")
+summary (BACKWARD )
+```
+
+```{r}
+stepAIC(Prediccion1, direction="both")
+```
+
+```{r}
+#CROSS VALIDATION - VALIDATION SET
+#Consiste en dividir la muestra de forma aleatoria en dos submuestras. Utilizar una para el training (se estima el modelo) y la otra para el testing (se predice el modelo)
+
+library(ISLR)
+set.seed(8)
+numnba=nrow(NBAdata) #Submuestra1
+train=sample(numnba, numnba/2)
+
+regres.train =lm(Salary~(Ranking + Age + Partidos + Minutos + ReboteDefensa + Compañerismo + BuenAtaque + BuenoTotal + VORP), NBAdata , subset =train )
+attach(NBAdata) #Submuestra2
+
+mean((Salary-predict(regres.train, Auto))[-train ]^2)
+sqrt(mean((Salary-predict(regres.train, Auto))[-train ]^2))
+```
+
+
+```{r}
+Resultados <-predict.lm(Prediccion)
+
+```
+```{r}
+
+summary(Resultados)
+```
+```{r}
+library(VIF)
+vif(Prediccion)
+```
+
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<canciones>
+ <cancion fecha="1992">
+  <titulo>
+   Nothing Else Matters
+  </titulo>
+  <interprete>
+   Metallica
+  </interprete>
+ </cancion>
+ <cancion fecha="2010">
+  <titulo>
+   Need you now
+  </titulo>
+  <interprete>
+   Lady Antebellum
+  </interprete>
+  <estilo>
+   Country pop
+  </estilo>
+ </cancion>
+</canciones>

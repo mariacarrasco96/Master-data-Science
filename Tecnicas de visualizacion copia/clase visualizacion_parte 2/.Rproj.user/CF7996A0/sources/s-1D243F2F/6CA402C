@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571908900387.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "402928084",
+    "id" : "6CA402C",
+    "lastKnownWriteTime" : 1571913176,
+    "last_content_update" : 1571913176584,
+    "path" : "~/Documents/Predicción/Practica Bicis/Maria Carrasco Melendez_bicis.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "131,0",
+        "last_setup_crc32" : "1D243F2Fbb338d19",
+        "scrollLine" : "110"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,88 @@
+html {
+    //height: 100%;
+    color: #000000;
+
+
+}
+
+body {
+    overflow-x: hidden;
+    font-size: 12px;
+    font-family: Bitter, "Helvetica Neu", Helvetica, Arial, sans-serif;
+    line-height: 1.475em;
+/*    background-attachment: fixed;
+    background-image: url('ucmfondo.jpg');
+    background-repeat: no-repeat;
+    background-position: 35% 4em;*/
+    margin: 0;
+    padding: 0;
+/*    min-height: 100%;
+    background-color: #B71234;*/
+}
+
+main {
+    margin: 3em 1em;
+    padding-left: 1.2em;
+    border-left: 2px solid #B71234;
+    padding-bottom: 2em;
+
+}
+
+
+h2.title {
+    
+    font-size: 2.5em;
+    border-bottom: none;
+    margin-bottom: 1em;
+}
+
+h3 {
+    font-family: Bitter, "Helvetica Neu", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+}
+
+
+
+h1 {
+    font-family: Bitter, "Helvetica Neu", Helvetica, Arial, sans-serif;
+    font-size: 1.3em;
+    text-align: right;
+}
+
+
+a {
+    color: #000000;
+}
+a:hover {
+
+    text-decoration: none;
+    /*
+    color: #B8281A;
+    font-weight: 600;
+    text-decoration: none;
+    */
+}
+
+.logo {
+    display: block;
+    max-height: 3cm;
+}
+ol{
+    
+}
+
+li {
+    list-style: none;
+    line-height: 1.7em;
+}
+
+ol>li {
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+@media print {
+  a[href]:after {
+    content: "";
+  }
+}

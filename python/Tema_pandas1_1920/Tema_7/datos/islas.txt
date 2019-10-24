@@ -1,0 +1,5 @@
+Nombre		Superficie    Densidad
+Borneo		748168		26,3
+Madagascar	587713		34,1
+Cuba		105806		103,3
+Taiwan		35753		371

@@ -1,0 +1,12 @@
+[{ "Group": {"Name":"Metallica"},
+   "Genre" : "Metal",
+   "Songs" :[{"Title":    "Nothing Else Matters", "Length": "6:29", "Date": 1992},
+				 {"Title":    "Hero Of The Day", "Length": "4:21"}          ]
+},
+{  "Group": {"Name": "Lady Antebellum"},
+   "Genre" : "Country pop", 
+   "Songs" :[{"Title":    "Need you now", "Length": "4:37", "Date": 2010},
+				 {"Title":    "I Run To You", "Length": "4:17",  "Date": 2010},
+                 {"Title":    "American honey", "Length": "3:44"}				 ]
+}
+]

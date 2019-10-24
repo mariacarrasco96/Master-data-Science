@@ -1,0 +1,24 @@
+[{ "Group": {"Name":"Metallica"},
+   "Genre" : "Metal",
+   "Songs" :[{"Title":    "Nothing Else Matters", "Length": "6:29", "Date": 1992},
+				 {"Title":    "Hero Of The Day", "Length": "4:21"}          ]
+},
+{  "Group": {"Name": "Lady Antebellum"},
+   "Genre" : "Country pop", 
+   "Songs" :[{"Title":    "Need you now", "Length": "4:37", "Date": 2010},
+				 {"Title":    "I Run To You", "Length": "4:17",  "Date": 2010},
+                 {"Title":    "American honey", "Length": "3:44"}				 ]
+},
+{  "Group": {"Name": "Amy Macdonald"},
+   "Genre" : "Rock", 
+   "Songs" :[{"Title":    "This Is the Life", "Length": "3:05", "Date": 2007},
+			{"Title":    "Poison Prince", "Length": "3:28",  "Date": 2007},
+            {"Title":    "Run", "Length": "3:50", "Date": 2007}				 ]
+},
+{  "Group": {"Name": "Tina Turner"},
+   "Genre" : "Folk", 
+   "Songs" :[{"Title":    "Girls", "Length": "4:56", "Date": 1988 },
+				 {"Title":    "Whatever You Need", "Length": "4:49",  "Date": 1999},
+                 {"Title":    "Rock Me Baby", "Length": "3:57", "Date": 1999}				 ]
+}
+]

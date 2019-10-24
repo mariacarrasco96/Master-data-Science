@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571910543150.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "583CE2BF",
+    "lastKnownWriteTime" : 1571910542,
+    "last_content_update" : 1571910590168,
+    "path" : "/private/var/folders/dr/0q684spx2m59s8nv6kh9tggm0000gn/T/com.microsoft.Outlook/Outlook Temp/Iris[3].Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "87,0",
+        "scrollLine" : "68"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

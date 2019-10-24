@@ -1,0 +1,148 @@
+---
+title: "Prediccion_maria_carrasco"
+author: "yo"
+date: "10/10/2019"
+output: pdf_document
+---
+Cargamos las librerías
+```{r}
+library(readr)
+library(tidyverse)
+library(fBasics)
+library(nortest)
+```
+Cargamos nuestro data.frame y renombramos a las variables con un nombre reconocible. Tambien eliminamos los NA y los datos repetidos mediante unique
+```{r}
+nba<-read.csv("/Users/mariacarrasco/Downloads/nba.csv")
+nba
+nba=na.omit(nba)
+nba=unique(nba)
+names(nba)[3]<-"Pais"
+names(nba)[4]<-"Ranking"
+names(nba)[6]<-"Equipo"
+names(nba)[7]<-"Partidos"
+names(nba)[8]<-"Minutos"
+names(nba)[9]<-"Eficiencia"
+names(nba)[10]<-"Aciertos"
+names(nba)[11]<-"Triple_Intento"
+names(nba)[12]<-"Tiro_Libre"
+names(nba)[13]<-"Rebote_Ofensa"
+names(nba)[14]<-"Rebote_Defensa"
+names(nba)[15]<-"Rebotes_Total"
+names(nba)[16]<-"Asistencia"
+names(nba)[17]<-"Robo"
+names(nba)[18]<-"Bloqueos"
+names(nba)[19]<-"PerdidaBalon"
+names(nba)[20]<-"Jugar_Equipo"
+names(nba)[21]<-"Ataque_Acertado"
+names(nba)[22]<-"Defensa_Acertada"
+names(nba)[23]<-"Aciertos"
+names(nba)[24]<-"Aciertos48"
+
+nba <- nba[,-(25:28)]
+```
+
+Creamos nuestro modelo en el que el salario va en función de todas las anteriores variables exceptuando el equipo, el jugador y el pais, y hacemos un summary para que muestre los coeficientes de acda variable
+
+```{r}
+library(MASS)
+library(leaps)
+
+nba2_modelo<-lm(Salary~ . - (Equipo + Player + Pais), data=nba)
+
+summary(nba2_modelo)
+```
+Ahora cargaremos las librerias MASS y leaps, y realizaremos un backward Stepwise, mediante el cual eliminaremos las variables que menos relevantes sean. En este caso, seleccionaremos el bloque con menor AIC.
+```{r}
+library(MASS)
+library(leaps)
+
+stepAIC(nba2_modelo, direction="backward")
+```
+A partir del bloque con menor AIC(14922.71), elegiremos esas variables para un segundo modelo by detectaremos su multiolinealidad, la cual nos indica que la variable mionutos debe ser elimionada. Cuando sqrt(vif(nba2_modelo_2)) > 2 esto ocurre, nos indica que hay problemas de multicolinealidad, la codependencia entre las variables. Procederemos a eliminar estas variables una por una , y de esta manera estudiamos como el modelo se va ajustando. En primer lugar procederemos a eliminar minutos por ser la mayor de todas
+```{r}
+#creacion segundo modelo
+nba2_modelo_2=lm(Salary ~ Ranking + Age + Partidos + Minutos + Rebote_Ofensa + 
+    Rebotes_Total + Jugar_Equipo + Aciertos.1, nba)
+
+
+
+#Detección de la multicolinealidad
+
+
+install.packages("lme4", repos="http://cran.rstudio.com/",type = "binary", dependencies=TRUE)
+install.packages("nlme", repos="http://cran.rstudio.com/",type = "binary", dependencies=TRUE)
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/pbkrtest/pbkrtest_0.4-4.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+
+library(car)
+
+vif(nba2_modelo_2)
+
+sqrt(vif(nba2_modelo_2)) > 2
+```
+
+Nuevo modelo con la variable minutos eliminada, nuestras expectativas se cumplen
+```{r}
+nba2_modelo_2_minutos<-lm(Salary ~ Ranking + Age + Partidos + Rebote_Ofensa + 
+    Rebotes_Total + Jugar_Equipo + Aciertos.1, nba)
+
+  
+summary(nba2_modelo_2_minutos)
+
+```
+Observamos la multicolinealidad de este nuevo modelo con la variable minutos eliminada,realizando de nuevo el test, y vemos que  en este caso hemos eliminado este problema de multicolinealidad.
+```{r}
+library(car)
+
+vif(nba2_modelo_2_minutos)
+
+sqrt(vif(nba2_modelo_2_minutos)) > 2
+```
+
+Al resolver el problema de multicolinealidad creamos un modelo defibnitivo
+```{r}
+nba2_modelo_3<-lm(Salary ~ Ranking + Age + Partidos + Rebote_Ofensa + 
+    Rebotes_Total + Jugar_Equipo + Aciertos.1, nba)
+
+summary(nba2_modelo_3)
+```
+Conmparamos los dos modelos mediante la funcion BIC y obvservamos que  que el nuevo modelo definitivo,nba2_modelo_3, es mejor que el primero ya que tiene un bic menor al elegir el metodo del backward model
+```{r}
+#comparamos modelos
+
+BIC(nba2_modelo,nba2_modelo_3)
+```
+Mediante plot observamos como los valores estan ajustados. la mayoria de ellos se encuentran en la parte central situados sobre la linea de regresion por lo que en este lugar el ajuste es perfecto.
+```{r}
+library(car)
+qqPlot(nba2_modelo_3, labels=row.names(nba), id.method="identify",
+      simulate=TRUE, main="Q-Q Plot")
+```
+Obtenemos una visualizacion global
+```{r}
+library(gvlma)
+
+global <- gvlma(nba2_modelo_3) 
+summary(global)
+
+gvlma(x = nba2_modelo_3)
+```
+Determinamos como hemos predicho este modelo mediente la funcion predict.lm, y vemos como se ha predicho el salario del jugador Willy Johnson, elegido al azar, el cual se aproxima bastante ya que tiene un error de miles de euros.
+```{r}
+#prediccion de un jugador al azar
+predict.lm(nba2_modelo_3,data.frame(Age=30 , Ranking=4 , Partidos=70 , Rebotes_Total= 8.1, Rebote_Ofensa=2.1, Jugar_Equipo=13 , Aciertos.1=0.512))
+
+Resultados<- predict.lm(nba2_modelo_3)
+  
+
+
+```
+
+
+
+
+
+
+
+

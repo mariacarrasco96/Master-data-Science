@@ -1,0 +1,22 @@
+"0","day <- read_csv(""day.csv"")
+"
+"2","Parsed with column specification:
+cols(
+  instant = [32mcol_double()[39m,
+  dteday = [34mcol_date(format = """")[39m,
+  season = [32mcol_double()[39m,
+  yr = [32mcol_double()[39m,
+  mnth = [32mcol_double()[39m,
+  holiday = [32mcol_double()[39m,
+  weekday = [32mcol_double()[39m,
+  workingday = [32mcol_double()[39m,
+  weathersit = [32mcol_double()[39m,
+  temp = [32mcol_double()[39m,
+  atemp = [32mcol_double()[39m,
+  hum = [32mcol_double()[39m,
+  windspeed = [32mcol_double()[39m,
+  casual = [32mcol_double()[39m,
+  registered = [32mcol_double()[39m,
+  cnt = [32mcol_double()[39m
+)
+"

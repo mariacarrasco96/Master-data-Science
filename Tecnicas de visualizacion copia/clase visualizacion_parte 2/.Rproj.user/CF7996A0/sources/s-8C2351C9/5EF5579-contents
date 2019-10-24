@@ -1,0 +1,17 @@
+library(shiny)
+library(ggplot2)
+
+shinyServer(function(input,  output){
+  
+  output$texto1<- renderText(
+    paste0("Este es el grafico de: ",input$variablex, "x", input$variabley)
+    
+  )
+  output$grafica<- renderPlot(
+   
+     ggplot(mpg, aes_string(x = input$variablex, y = input$variabley)) + geom_point()
+    
+    
+  )
+
+})

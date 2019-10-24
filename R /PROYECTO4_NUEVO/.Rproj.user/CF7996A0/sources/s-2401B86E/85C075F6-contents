@@ -1,0 +1,39 @@
+
+nba<-data.frame(nba)
+nba
+
+names(nba)[3]<-"Pais"
+names(nba)[4]<-"Ranking"
+names(nba)[6]<-"Equipo"
+names(nba)[7]<-"Partidos"
+names(nba)[8]<-"Minutos"
+names(nba)[9]<-"Eficiencia"
+names(nba)[10]<-"Aciertos"
+names(nba)[11]<-"Triple_Intento"
+names(nba)[12]<-"Tiro_Libre"
+names(nba)[13]<-"Rebote_Ofensa"
+names(nba)[14]<-"Rebote_Defensa"
+names(nba)[15]<-"Rebotes_Total"
+names(nba)[16]<-"Asistencia"
+names(nba)[17]<-"Robo"
+names(nba)[18]<-"Bloqueos"
+names(nba)[19]<-"PerdidaBalon"
+names(nba)[20]<-"Jugar_Equipo"
+names(nba)[21]<-"Ataque_Acertado"
+names(nba)[22]<-"Defensa_Acertada"
+names(nba)[23]<-"Aciertos"
+names(nba)[24]<-"Aciertos48"
+
+nba <- nba[,-(25:28)]
+
+nba2<-lm(Salary~Pais+ Ranking+ Equipo+ Partidos+ Minutos+ Eficiencia+ Aciertos+ Triple_Intento+ Tiro_Libre+ Rebote_Ofensa+ Rebote_Defensa+ Rebotes_Total+
+           Asistencia+ Robo+ Bloqueos+ PerdidaBalon+ Jugar_Equipo+ Ataque_Acertado+ Defensa_Acertada+ Aciertos+ Aciertos48, data=nba)
+
+summary(nba2)
+
+
+
+
+
+
+

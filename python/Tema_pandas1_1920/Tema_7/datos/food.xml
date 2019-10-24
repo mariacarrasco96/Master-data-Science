@@ -1,0 +1,12 @@
+<?xml version="1.0"?>                            
+<food>                                         
+     <item type="fruit">                       
+          <name>watermelon</name>              
+          <price>32</price>                    
+     </item>                                   
+     <item type="fruit">                       
+         <name>oranges</name>                  
+         <variety>navel</variety>              
+         <price>75</price>                     
+     </item>                                                                   
+</food>

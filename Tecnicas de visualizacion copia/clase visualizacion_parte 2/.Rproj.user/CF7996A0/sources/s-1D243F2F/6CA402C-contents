@@ -1,0 +1,132 @@
+---
+title: "prediccion Bicis"
+author: "Maria Carrasco Melendez"
+date: "10/22/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##
+
+```{r}
+library(readr)
+day <- read_csv("day.csv")
+View(day)
+
+```
+
+## 
+
+```{r}
+names(day)[16]<-"total"
+names(day)[2]<-"date"
+names(day)[4]<-"year"
+names(day)[5]<-"month"
+
+```
+Cargamos el resto de librerías
+```{r}
+library(tidyverse)
+library(skimr) # Beautiful Summarize
+library(magrittr) # Pipe operators
+library(corrplot) # Correlations
+library(ggcorrplot)  # Correlations
+library(PerformanceAnalytics) # Correlations
+library(leaps) # Model selection
+library(caret) # Cross Validation
+library(bestglm) # Cross Validation
+library(glmnet) # Regularization
+library(knitr)
+library(ISLR)
+library(gam)
+library(fBasics)
+library(nortest)
+library(MASS)
+library(rsample)
+
+``
+```
+Es como un summary pero más completo, a tarvés de sus resuktados llegamos a la conclusión de que no hay valores no explicados, datos repetidos ni NA.
+
+```{r}
+skim(day)
+```
+
+Aislamos los valores que creemos menos influyentes y realizamos las correlaciones
+EDA
+```{r}
+prueba<- c("year", "month", "date", "instant")
+
+corrplot(cor(day %>% 
+               select_at(vars(-prueba)), 
+             use = "complete.obs"), 
+         method = "circle",type = "upper")
+
+
+```
+
+
+```{r}
+ggcorrplot(cor(day %>% 
+               select_at(vars(-prueba)), 
+            use = "complete.obs"),
+            hc.order = TRUE,
+            type = "lower",  lab = TRUE)
+```
+
+model selection
+```{r}
+
+day_2 <- day %>% select_at(vars(-prueba))
+
+
+model_select <- regsubsets(total~. , data =day_2, method = "seqrep",nvmax=24)#si no pones 24, coge solo 8
+
+model_select_summary <- summary(model_select)
+
+data.frame(
+  Adj.R2 = (model_select_summary$adjr2),
+  CP = (model_select_summary$cp),
+  BIC = (model_select_summary$bic)
+)
+```
+
+Mediante esta representacción, a través de los cuadrados, observamos que variables son las que mejor se ajustan al modelo
+```{r}
+plot(model_select, scale = "adjr2", main = "Adjusted R^2")
+```
+
+
+```{r}
+data.frame(
+  Adj.R2 = which.max(model_select_summary$adjr2),
+  CP = which.min(model_select_summary$cp),
+  BIC = which.min(model_select_summary$bic)
+)
+```
+MODELO GAM
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
