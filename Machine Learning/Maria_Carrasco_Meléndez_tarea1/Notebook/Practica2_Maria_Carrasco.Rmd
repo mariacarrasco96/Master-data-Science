@@ -1,0 +1,190 @@
+---
+title: "Gradiente_Practica2"
+author: "Maria Carrasco Melendez"
+date: "11/8/2019"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(ISLR)
+library(MASS)
+library(dplyr)
+library (here)
+library(ggplot2)
+
+
+```
+
+Suppose that you are an administrator of a university and you want to know the chance of admission of each applicant based on their two exams. You have historical data from previous applicants which can be used as the training data for logistic regression. Your task is to build a classification model that estimates each applicant’s probability of admission in university (Source:coursera machine learning class and Gondaliya (2013))
+
+```{r}
+
+data <- read.csv("/Users/mariacarrasco/Documents/Master data Science/machine_learning_basics/data/4_1_data.csv")
+```
+
+Análisis exploratorio
+
+```{r}
+summary(data)
+colSums(is.na(data))
+
+```
+
+Graficamos los datos
+
+```{r}
+plot(data$score.1, data$score.2, col = as.factor(data$label), xlab = "score.1", ylab = "score.2")
+```
+
+
+
+######################################################
+
+
+EJERCICIO 1
+
+Obtener la matriz de confusión:
+
+```{r}
+#Predictor variables
+X <- as.matrix(data[, c(1,2)])
+
+#Add ones to X in the first column (matrix multiplication x b)
+X <- cbind(rep(1, nrow(X)), X)
+
+#Response variable
+Y <- as.matrix(data$label)
+```
+
+Sigmoide
+
+La sigmoide lo que hace es estirar los valores para que se tome la decisión de una manera más facil. Tira y tensa hacia arriba, para seleccionar mejor los valores que tienen probabilidad 1 y probabilidad 0.
+
+```{r}
+# Ecuación de la sigmoide.
+sigmoid<- function(x){
+         1/(1+exp(-x))
+}
+ 
+# grafico de la sigmoide
+ x<- seq(-5,5,0.01)
+ plot(x,sigmoid(x), col="blue", ylim= c(-.2,1))
+ abline(h=0, v=0, col = "gray60")
+```
+Parámetros iniciales: 
+
+```{r}
+initial_parameters <- rep(0, ncol(X))
+```
+
+Función de Coste:
+
+```{r}
+CostFunction <- function(parameters, X, Y) {
+  n <- nrow(X)
+  # function to apply (%*% Matrix multiplication)
+  g <- sigmoid(X %*% parameters)##APRENDER#######
+  J <- (1/n) * sum((-Y * log(g)) - ((1 - Y) * log(1 - g)))
+  return(J)
+}
+```
+
+
+```{r}
+# We want to minimize the cost function. Then derivate this funcion
+TestGradientDescent <- function(iterations = 1200, X, Y) {
+  
+  # Initialize (b, W)
+  parameters <- rep(0, ncol(X))
+  # Check evolution
+  print(paste("Initial Cost Function value: ", 
+              convergence <- c(CostFunction(parameters, X, Y)), sep = ""))
+  
+  # updating (b, W) using gradient update
+  
+  # Derive theta using gradient descent using optim function
+  # Look for information about the "optim" function (there are other options)
+  parameters_optimization <- optim(par = parameters, fn = CostFunction, X = X, Y = Y, 
+                                   control = list(maxit = iterations))
+  #set parameters
+  parameters <- parameters_optimization$par
+  
+  # Check evolution
+  print(paste("Final Cost Function value: ", 
+              convergence <- c(CostFunction(parameters, X, Y)), sep = ""))
+
+ return(parameters) 
+}
+```
+
+```{r}
+parametro_optimo<- TestGradientDescent(X =X, Y = Y )
+parametro_optimo
+```
+
+Se calculan las probabilidades que tienen de entrar todos los alumnos:
+
+```{r}
+print(prob_new_student <- t(sigmoid(parametro_optimo %*% t(X))))
+#probabilidades de entrar de todos los alumnos del train
+prob_al<- t(sigmoid(parametro_optimo %*% t(X)))
+```
+Realización de la matriz de confusión:  es una herramienta que permite la visualización del desempeño de un algoritmo que se emplea en aprendizaje supervisado. Cada columna de la matriz representa el número de predicciones de cada clase, mientras que cada fila representa a las instancias en la clase real. Uno de los beneficios de las matrices de confusión es que facilitan ver si el sistema está confundiendo dos clases.
+
+Se ha eligido un cut-off de 0.7.
+
+```{r}
+prob_al[prob_al[,1] > 0.7 ]=1
+prob_al[prob_al[,1] != 1 ]=0
+table(data$label, prob_al)
+```
+##################
+
+EJERCICIO 2
+
+Se representa gráficamente la función de coste, para ello se ha empleado un bucle for.
+
+```{r}
+evolucion <- data.frame("iteraciones" = 0, "coste" = 0)
+
+for (i in seq(1:200)){
+  parametros <- TestGradientDescent(i, X, Y)
+  coste <- CostFunction(parametros, X, Y)
+  evolucion[i,] <- c(i, coste)
+}
+
+ggplot(evolucion, aes(x = evolucion$iteraciones, y = evolucion$coste))+ geom_line() + xlab("iteraciones") + ylab("coste")
+
+```
+################
+
+EJERCICIO 3
+
+Se obtiene el avlor incial de coste y los parámetros óptimos.
+
+```{r}
+
+TestGradientDescent2 <- function(iterations, X, Y, method) {
+  
+  
+  parameters <- rep(0, ncol(X))
+  
+  print(paste("Initial Cost Function value: ", 
+              convergence <- c(CostFunction(parameters, X, Y)), sep = ""))
+  
+ 
+  parameters_optimization <- optim(par = parameters, fn = CostFunction, X = X, Y = Y, 
+                                   control = list(maxit = iterations), method = method)
+  
+  parameters2 <- parameters_optimization$par
+  
+ return(parameters2) 
+}
+
+TestGradientDescent2(1200, X, Y, "BFGS")
+
+```
+
+
+
